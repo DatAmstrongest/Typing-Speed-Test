@@ -8,44 +8,51 @@ CURRENT_INDEX = 0
 
 def callback(var_x):
     if var_x.get()[-1] == " " or var_x.get()[-1] == "":
-        global CURRENT_GROUP_INDEX
-        global CURRENT_WORD_INDEX
-        global CURRENT_WORDS
-        global CURRENT_INDEX
-
         word = var_x.get()
         text_input.delete(0, END)
         if CURRENT_WORD_INDEX >= len(CURRENT_WORDS):
             show_game_result()
         else:
             color_word(word)
-        CURRENT_INDEX += len(CURRENT_WORDS[CURRENT_WORD_INDEX])+1
-        CURRENT_WORD_INDEX += 1
         if CURRENT_WORD_INDEX == 10:
-            CURRENT_GROUP_INDEX += 1
-            CURRENT_WORD_INDEX = 0  
-            CURRENT_WORDS = WORDS[10*CURRENT_GROUP_INDEX: 10*CURRENT_GROUP_INDEX+10]
-            CURRENT_INDEX = 0
-            text.config(state=NORMAL)
-            text.delete("1.0", END)
-            text.insert(INSERT, " ".join(CURRENT_WORDS))
-            text.config(state=DISABLED)
-            text.tag_configure("center", justify='center')
+            fetch_new_words()
 
 def color_word(word):
+    global CURRENT_WORD_INDEX
+    global CURRENT_INDEX
+
     if word.strip() == CURRENT_WORDS[CURRENT_WORD_INDEX].strip():
         color_correct_word()
     else:
         color_wrong_word()
-
+    CURRENT_INDEX += len(CURRENT_WORDS[CURRENT_WORD_INDEX])+1
+    CURRENT_WORD_INDEX += 1
 
 def color_correct_word():
     text.tag_add("first_word", f"1.{CURRENT_INDEX}", f"1.{CURRENT_INDEX+len(CURRENT_WORDS[CURRENT_WORD_INDEX])}")
     text.tag_config("first_word", foreground="#08D9D6")
 
 def color_wrong_word():
+    print(CURRENT_WORDS[CURRENT_WORD_INDEX])
     text.tag_add("second_word", f"1.{CURRENT_INDEX}", f"1.{CURRENT_INDEX+len(CURRENT_WORDS[CURRENT_WORD_INDEX])}")
     text.tag_config("second_word", foreground="#FF2E63")
+
+
+def fetch_new_words():
+    global CURRENT_WORD_INDEX
+    global CURRENT_GROUP_INDEX
+    global CURRENT_INDEX
+    global CURRENT_WORDS
+
+    CURRENT_GROUP_INDEX += 1
+    CURRENT_WORD_INDEX = 0  
+    CURRENT_WORDS = WORDS[10*CURRENT_GROUP_INDEX: 10*CURRENT_GROUP_INDEX+10]
+    CURRENT_INDEX = 0
+    text.config(state=NORMAL)
+    text.delete("1.0", END)
+    text.insert(INSERT, " ".join(CURRENT_WORDS))
+    text.config(state=DISABLED)
+    text.tag_configure("center", justify='center')
 
 def show_game_result():
     return 

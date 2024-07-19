@@ -15,13 +15,10 @@ def callback(var_x):
 
         word = var_x.get()
         text_input.delete(0, END)
-
-        if word.strip() == CURRENT_WORDS[CURRENT_WORD_INDEX].strip():
-            text.tag_add("first_word", f"1.{CURRENT_INDEX}", f"1.{CURRENT_INDEX+len(word)}")
-            text.tag_config("first_word", foreground="#08D9D6")
+        if CURRENT_WORD_INDEX >= len(CURRENT_WORDS):
+            show_game_result()
         else:
-            text.tag_add("second_word", f"1.{CURRENT_INDEX}", f"1.{CURRENT_INDEX+len(CURRENT_WORDS[CURRENT_WORD_INDEX])}")
-            text.tag_config("second_word", foreground="#FF2E63")
+            color_word(word)
         CURRENT_INDEX += len(CURRENT_WORDS[CURRENT_WORD_INDEX])+1
         CURRENT_WORD_INDEX += 1
         if CURRENT_WORD_INDEX == 10:
@@ -35,7 +32,24 @@ def callback(var_x):
             text.config(state=DISABLED)
             text.tag_configure("center", justify='center')
 
-    return True
+def color_word(word):
+    if word.strip() == CURRENT_WORDS[CURRENT_WORD_INDEX].strip():
+        color_correct_word()
+    else:
+        color_wrong_word()
+
+
+def color_correct_word():
+    text.tag_add("first_word", f"1.{CURRENT_INDEX}", f"1.{CURRENT_INDEX+len(CURRENT_WORDS[CURRENT_WORD_INDEX])}")
+    text.tag_config("first_word", foreground="#08D9D6")
+
+def color_wrong_word():
+    text.tag_add("second_word", f"1.{CURRENT_INDEX}", f"1.{CURRENT_INDEX+len(CURRENT_WORDS[CURRENT_WORD_INDEX])}")
+    text.tag_config("second_word", foreground="#FF2E63")
+
+def show_game_result():
+    return 
+
 
 def read_file():
     global WORDS

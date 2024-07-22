@@ -5,6 +5,7 @@ CURRENT_WORDS = []
 CURRENT_GROUP_INDEX = 0
 CURRENT_WORD_INDEX = 0
 CURRENT_INDEX = 0
+SHOWN_WORD_UPPER_LIMIT = 10
 
 def callback(var_x):
     if var_x.get()[-1] == " " or var_x.get()[-1] == "":
@@ -14,7 +15,8 @@ def callback(var_x):
             show_game_result()
         else:
             color_word(word)
-        if CURRENT_WORD_INDEX == 10:
+
+        if CURRENT_WORD_INDEX == SHOWN_WORD_UPPER_LIMIT:
             fetch_new_words()
 
 def color_word(word):
@@ -45,13 +47,13 @@ def fetch_new_words():
 
     CURRENT_GROUP_INDEX += 1
     CURRENT_WORD_INDEX = 0  
-    if 10*CURRENT_GROUP_INDEX >= len(WORDS):
+    if SHOWN_WORD_UPPER_LIMIT*CURRENT_GROUP_INDEX >= len(WORDS):
         show_game_result()
         return
-    elif 10*CURRENT_GROUP_INDEX+10 >= len(WORDS):
-         CURRENT_WORDS = WORDS[10*CURRENT_GROUP_INDEX:]
+    elif SHOWN_WORD_UPPER_LIMIT*CURRENT_GROUP_INDEX+SHOWN_WORD_UPPER_LIMIT >= len(WORDS):
+         CURRENT_WORDS = WORDS[SHOWN_WORD_UPPER_LIMIT*CURRENT_GROUP_INDEX:]
     else:
-        CURRENT_WORDS = WORDS[10*CURRENT_GROUP_INDEX: 10*CURRENT_GROUP_INDEX+10]
+        CURRENT_WORDS = WORDS[SHOWN_WORD_UPPER_LIMIT*CURRENT_GROUP_INDEX: SHOWN_WORD_UPPER_LIMIT*CURRENT_GROUP_INDEX+SHOWN_WORD_UPPER_LIMIT]
     CURRENT_INDEX = 0
     text.config(state=NORMAL)
     text.delete("1.0", END)
@@ -67,9 +69,12 @@ def read_file():
     global WORDS
     global CURRENT_WORDS
     with open("./assets/sample_text.txt", "r") as file:
-        text = file.read()
-        WORDS = text.split(" ")
-        CURRENT_WORDS = [word.strip() for word in WORDS[0:10] if word != '' and word != ' ']
+        lines = file.readlines()
+        for line in lines:
+            WORDS = WORDS + [word.strip() for word in line.strip().split(" ") if word.strip()]
+        CURRENT_WORDS =  WORDS[0: SHOWN_WORD_UPPER_LIMIT]
+
+
             
 
 root = Tk()

@@ -33,7 +33,6 @@ def color_correct_word():
     text.tag_config("first_word", foreground="#08D9D6")
 
 def color_wrong_word():
-    print(CURRENT_WORDS[CURRENT_WORD_INDEX])
     text.tag_add("second_word", f"1.{CURRENT_INDEX}", f"1.{CURRENT_INDEX+len(CURRENT_WORDS[CURRENT_WORD_INDEX])}")
     text.tag_config("second_word", foreground="#FF2E63")
 
@@ -46,7 +45,13 @@ def fetch_new_words():
 
     CURRENT_GROUP_INDEX += 1
     CURRENT_WORD_INDEX = 0  
-    CURRENT_WORDS = WORDS[10*CURRENT_GROUP_INDEX: 10*CURRENT_GROUP_INDEX+10]
+    if 10*CURRENT_GROUP_INDEX >= len(WORDS):
+        show_game_result()
+        return
+    elif 10*CURRENT_GROUP_INDEX+10 >= len(WORDS):
+         CURRENT_WORDS = WORDS[10*CURRENT_GROUP_INDEX:]
+    else:
+        CURRENT_WORDS = WORDS[10*CURRENT_GROUP_INDEX: 10*CURRENT_GROUP_INDEX+10]
     CURRENT_INDEX = 0
     text.config(state=NORMAL)
     text.delete("1.0", END)
@@ -55,8 +60,8 @@ def fetch_new_words():
     text.tag_configure("center", justify='center')
 
 def show_game_result():
-    return 
-
+    for child in root.winfo_children(): 
+        child.destroy()
 
 def read_file():
     global WORDS
@@ -64,7 +69,7 @@ def read_file():
     with open("./assets/sample_text.txt", "r") as file:
         text = file.read()
         WORDS = text.split(" ")
-        CURRENT_WORDS = WORDS[0:10]
+        CURRENT_WORDS = [word.strip() for word in WORDS[0:10] if word != '' and word != ' ']
             
 
 root = Tk()

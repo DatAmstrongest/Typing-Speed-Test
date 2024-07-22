@@ -1,1 +1,3 @@
-Lorem ipsum dolor sit amet, consectetur 
+That usually means the code did something like root.after(some_time_period, some_function), and before the time period has expired the root window gets destroyed.
+
+If you're not explicitly calling after yourself, this may be a bug in customtkinter.

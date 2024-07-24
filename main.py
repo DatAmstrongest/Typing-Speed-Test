@@ -20,7 +20,7 @@ TIME_UPPER_LIMIT = 10
 CURRENT_TIME = TIME_UPPER_LIMIT
 
 def callback(var_x):
-    if var_x.get()[-1] == " " or var_x.get()[-1] == "":
+    if len(var_x.get()) and (var_x.get()[-1] == " " or var_x.get()[-1] == ""):
         word = var_x.get()
         text_input.delete(0, END)
         color_word(word)
@@ -85,11 +85,11 @@ def show_game_result():
     net_speed = int(typing_speed*accuracy)
     print(f"Typing Speed: {typing_speed}\nAccuracy: {accuracy}\nNet Speed: {net_speed}")
     canvas = Canvas(bg=BACKGROUND_COLOR, width=600, highlightthickness=0)
-    canvas.pack()
-    canvas.create_oval(25, 25, 125, 125, outline="black", fill=FOREGROUND_COLOR)
-    canvas.create_oval(150, 25, 250, 125, outline="black", fill=FOREGROUND_COLOR)
-    canvas.create_oval(275, 25, 375, 125, outline="black", fill=FOREGROUND_COLOR)
-
+    canvas.create_oval(25, 25, 175, 175, outline="black", fill=FOREGROUND_COLOR)
+    canvas.create_oval(200, 25, 350, 175, outline="black", fill=FOREGROUND_COLOR)
+    canvas.create_oval(375, 25, 525, 175, outline="black", fill=FOREGROUND_COLOR)
+    canvas.pack(anchor="center", padx=(50,0))
+      
 def read_file():
     global WORDS
     global CURRENT_WORDS

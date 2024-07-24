@@ -16,7 +16,7 @@ CORRECT_WORDS_NUM = 0
 WRONG_WORDS_NUM = 0
 TOTAL_WRITTEN_WORDS = 0
 
-TIME_UPPER_LIMIT = 10
+TIME_UPPER_LIMIT = 5
 CURRENT_TIME = TIME_UPPER_LIMIT
 
 def callback(var_x):
@@ -83,12 +83,28 @@ def show_game_result():
     typing_speed = int((TOTAL_WRITTEN_WORDS/TIME_UPPER_LIMIT)*60)
     accuracy = CORRECT_WORDS_NUM/TOTAL_WRITTEN_WORDS
     net_speed = int(typing_speed*accuracy)
+
     print(f"Typing Speed: {typing_speed}\nAccuracy: {accuracy}\nNet Speed: {net_speed}")
     canvas = Canvas(bg=BACKGROUND_COLOR, width=600, highlightthickness=0)
-    canvas.create_oval(25, 25, 175, 175, outline="black", fill=FOREGROUND_COLOR)
-    canvas.create_oval(200, 25, 350, 175, outline="black", fill=FOREGROUND_COLOR)
-    canvas.create_oval(375, 25, 525, 175, outline="black", fill=FOREGROUND_COLOR)
+    canvas.create_oval(25, 25, 175, 175, outline=CORRECT_COLOR, fill=FOREGROUND_COLOR)
+    canvas.create_oval(200, 25, 350, 175, outline=CORRECT_COLOR, fill=FOREGROUND_COLOR)
+    canvas.create_oval(375, 25, 525, 175, outline=CORRECT_COLOR, fill=FOREGROUND_COLOR)
     canvas.pack(anchor="center", padx=(50,0))
+
+    typing_speed_value_label = Label(root, text = typing_speed, font=("Open Sans", 36), fg=BACKGROUND_COLOR, bg=FOREGROUND_COLOR)
+    typing_speed_value_label.place(x=200, y=50)
+    typing_speed_label = Label(root, text="WPM", font=("Open Sans", 16), fg=BACKGROUND_COLOR, bg=FOREGROUND_COLOR)
+    typing_speed_label.place(x=200, y=110)
+
+    accuracy_value_label = Label(root, text = f"{int(accuracy*100)}%", font=("Open Sans", 35), fg=BACKGROUND_COLOR, bg=FOREGROUND_COLOR)
+    accuracy_value_label.place(x=363, y=50)
+    accuracy_label = Label(root, text=f"{WRONG_WORDS_NUM} typos", font=("Open Sans", 16), fg=BACKGROUND_COLOR, bg=FOREGROUND_COLOR)
+    accuracy_label.place(x=370, y=110)
+
+    net_speed_value_label = Label(root, text = net_speed, font=("Open Sans", 35), fg=BACKGROUND_COLOR, bg=FOREGROUND_COLOR)
+    net_speed_value_label.place(x=550, y=50)
+    net_speed_label = Label(root, text="Net Speed", font=("Open Sans", 16), fg=BACKGROUND_COLOR, bg=FOREGROUND_COLOR)
+    net_speed_label.place(x=540, y=110)
       
 def read_file():
     global WORDS

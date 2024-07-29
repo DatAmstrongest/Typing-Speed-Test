@@ -1,4 +1,5 @@
 from tkinter import *
+import requests
 
 WORDS = []
 CURRENT_WORDS = []
@@ -80,9 +81,12 @@ def fetch_new_words():
 def show_game_result():
     for child in root.winfo_children(): 
         child.destroy()
-    typing_speed = int((TOTAL_WRITTEN_WORDS/TIME_UPPER_LIMIT)*60)
-    accuracy = CORRECT_WORDS_NUM/TOTAL_WRITTEN_WORDS
-    net_speed = int(typing_speed*accuracy)
+    if TOTAL_WRITTEN_WORDS == 0:
+        typing_speed,accuracy,net_speed = 0,0,0
+    else:
+        typing_speed = int((TOTAL_WRITTEN_WORDS/TIME_UPPER_LIMIT)*60)
+        accuracy = CORRECT_WORDS_NUM/TOTAL_WRITTEN_WORDS
+        net_speed = int(typing_speed*accuracy)
 
     print(f"Typing Speed: {typing_speed}\nAccuracy: {accuracy}\nNet Speed: {net_speed}")
     canvas = Canvas(bg=BACKGROUND_COLOR, width=600, highlightthickness=0)
@@ -109,6 +113,8 @@ def show_game_result():
 def read_file():
     global WORDS
     global CURRENT_WORDS
+    url = requests.get("https://en.wikipedia.org/wiki/Special:Random/")
+    print(url.text)
     with open("./assets/sample_text.txt", "r") as file:
         lines = file.readlines()
         for line in lines:
